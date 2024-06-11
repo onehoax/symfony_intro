@@ -1,0 +1,13 @@
+services:
+  db:
+    image: mysql
+    container_name: mysql_frikili
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PWD}
+    ports:
+      - ${DB_LOCAL_PORT}:${DB_PORT}
+    volumes:
+      # - ./init.db:/docker-entrypoint-initdb.d
+      - ./data:/var/lib/mysql
