@@ -21,6 +21,20 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
+    public function findAllQuery()
+    {
+        $em = $this->getEntityManager();
+
+        $query = "
+          SELECT 
+              p.id, p.title, p.photo, p.publish_date
+          FROM 
+              App:Post p
+        ";
+
+        return $em->createQuery($query);
+    }
+
     public function add(Post $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -39,7 +53,7 @@ class PostRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
+    //    /**
 //     * @return Post[] Returns an array of Post objects
 //     */
 //    public function findByExampleField($value): array
@@ -54,7 +68,7 @@ class PostRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Post
+    //    public function findOneBySomeField($value): ?Post
 //    {
 //        return $this->createQueryBuilder('p')
 //            ->andWhere('p.exampleField = :val')
