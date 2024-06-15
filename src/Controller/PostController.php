@@ -24,23 +24,27 @@ class PostController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid()) {
       /** @var UploadedFile $file */
-      $file = $form->get('photo')->getData();
+      $file = $form->get("photo")->getData();
 
       // this condition is needed because the 'brochure' field is not required
       // so the PDF file must be processed only when a file is uploaded
       if ($file) {
-        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $originalFilename = pathinfo(
+          $file->getClientOriginalName(),
+          PATHINFO_FILENAME,
+        );
         // this is needed to safely include the file name as part of the URL
         // $safeFilename = $slugger->slug($originalFilename);
-        $safeFilename = transliterator_transliterate("Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()", $originalFilename);
-        $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+        $safeFilename = transliterator_transliterate(
+          "Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()",
+          $originalFilename,
+        );
+        $newFilename =
+          $safeFilename . "-" . uniqid() . "." . $file->guessExtension();
 
         // Move the file to the directory where brochures are stored
         try {
-          $file->move(
-            $this->getParameter("photos_dir"),
-            $newFilename
-          );
+          $file->move($this->getParameter("photos_dir"), $newFilename);
         } catch (FileException $e) {
           // ... handle exception if something happens during file upload
           throw new FileException("ERROR uploading file");
@@ -50,7 +54,6 @@ class PostController extends AbstractController
         // instead of its contents
         $post->setPhoto($newFilename);
       }
-
 
       $user = $this->getUser();
       $post->setUser($user);
@@ -62,8 +65,8 @@ class PostController extends AbstractController
       return $this->redirectToRoute("app_dashboard");
     }
 
-    return $this->render('post/index.html.twig', [
-      'form' => $form->createView()
+    return $this->render("post/index.html.twig", [
+      "form" => $form->createView(),
     ]);
   }
 
@@ -75,8 +78,8 @@ class PostController extends AbstractController
     $em = $this->getDoctrine()->getManager();
     $post = $em->getRepository(Post::class)->find($id);
 
-    return $this->render('post/single_post.html.twig', [
-      'post' => $post
+    return $this->render("post/single_post.html.twig", [
+      "post" => $post,
     ]);
   }
 
@@ -90,8 +93,8 @@ class PostController extends AbstractController
     $em = $this->getDoctrine()->getManager();
     $posts = $em->getRepository(Post::class)->findBy(["user" => $user]);
 
-    return $this->render('post/own_post.html.twig', [
-      'posts' => $posts
+    return $this->render("post/own_post.html.twig", [
+      "posts" => $posts,
     ]);
   }
 }

@@ -15,14 +15,18 @@ class RegisterController extends AbstractController
   /**
    * @Route("/register", name="app_register")
    */
-  public function index(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
-  {
+  public function index(
+    Request $request,
+    UserPasswordEncoderInterface $passwordEncoder
+  ): Response {
     $user = new User();
     $form = $this->createForm(UserType::class, $user);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-      $user->setPassword($passwordEncoder->encodePassword($user, $form["password"]->getData()));
+      $user->setPassword(
+        $passwordEncoder->encodePassword($user, $form["password"]->getData()),
+      );
 
       $em = $this->getDoctrine()->getManager();
       $em->persist($user);
@@ -33,9 +37,9 @@ class RegisterController extends AbstractController
       return $this->redirectToRoute("app_register");
     }
 
-    return $this->render('register/index.html.twig', [
-      'controller_name' => 'RegisterController',
-      "form" => $form->createView()
+    return $this->render("register/index.html.twig", [
+      "controller_name" => "RegisterController",
+      "form" => $form->createView(),
     ]);
   }
 }
