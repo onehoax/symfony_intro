@@ -1,9 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DashboardController!{% endblock %}
+{% block title %} {{ parent() }} Dashboard {% endblock %}
 
 {% block body %}
 
+{{ parent() }}
+<br/>
+<br/>
+Pagination: {{ dump(pagination) }}
+<br/>
+<br/>
 {# total items count #}
 <div class="count">
     {{ pagination.getTotalItemCount }}
@@ -11,12 +17,18 @@
 <table>
     <tr>
         {# sorting of properties based on query components #}
-        <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
+        <th>{{ knp_pagination_sortable(pagination, 'id', 'a.id') }}</th>
         <th{% if pagination.isSorted('a.title') %} class="sorted"{% endif %}>
-            {{ knp_pagination_sortable(pagination, 'Title', 'a.title') }}
+            {{ knp_pagination_sortable(pagination, 'title', 'a.title') }}
         </th>
         <th{% if pagination.isSorted(['a.date', 'a.time']) %} class="sorted"{% endif %}>
-            {{ knp_pagination_sortable(pagination, 'Release', ['a.date', 'a.time']) }}
+            {{ knp_pagination_sortable(pagination, 'publis_date', ['a.date', 'a.time']) }}
+        </th>
+        <th{% if pagination.isSorted('a.user_id') %} class="sorted"{% endif %}>
+            {{ knp_pagination_sortable(pagination, 'user_id', 'a.user_id') }}
+        </th>
+        <th{% if pagination.isSorted('a.user_name') %} class="sorted"{% endif %}>
+            {{ knp_pagination_sortable(pagination, 'user_name', 'a.user_name') }}
         </th>
     </tr>
 
@@ -27,6 +39,8 @@
             <td>{{ article.title }}</td>
             <td>{{ article.photo }}</td>
             <td>{{ article.publish_date | date('Y-m-d') }}</td>
+            <td>{{ article.user_id }}</td>
+            <td>{{ article.user_name }}</td>
         </tr>
     {% endfor %}
 </table>
@@ -34,5 +48,11 @@
 <div class="navigation">
     {{ knp_pagination_render(pagination) }}
 </div>
+
+<br/>
+<br/>
+Posts dump: {{ dump(posts) }}
+<br/>
+<br/>
 
 {% endblock %}

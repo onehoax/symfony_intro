@@ -12,22 +12,30 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractController
 {
   /**
-   * @Route("/dashboard", name="app_dashboard")
+   * @Route("/", name="app_dashboard")
    */
   public function index(PaginatorInterface $paginator, Request $request): Response
   {
-    $em = $this->getDoctrine()->getManager();
-    // $posts = $em->getRepository(Post::class)->findAll();
-    $postsQuery = $em->getRepository(Post::class)->findAllQuery();
 
-    $pagination = $paginator->paginate(
-      $postsQuery, /* query NOT result */
-      $request->query->getInt('page', 1), /*page number*/
-      2 /*limit per page*/
-    );
+    $user = $this->getUser();
 
-    return $this->render('dashboard/index.html.twig', [
-      'pagination' => $pagination
-    ]);
+    if ($user) {
+      $em = $this->getDoctrine()->getManager();
+      $postsQuery = $em->getRepository(Post::class)->findAllQuery();
+      $posts = $postsQuery->getResult();
+
+      $pagination = $paginator->paginate(
+        $postsQuery, /* query NOT result */
+        $request->query->getInt('page', 1), /*page number*/
+        2 /*limit per page*/
+      );
+
+      return $this->render('dashboard/index.html.twig', [
+        'pagination' => $pagination,
+        'posts' => $posts
+      ]);
+    } else {
+      return $this->redirectToRoute("app_login");
+    }
   }
 }
