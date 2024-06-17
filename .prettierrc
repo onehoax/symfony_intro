@@ -1,5 +1,9 @@
 {
-  "plugins": ["@prettier/plugin-php"],
+  "tabWidth": 2,
+  "plugins": ["@prettier/plugin-php", "prettier-plugin-sql"],
   "phpVersion": "7.4",
-  "tabWidth": 2
+  "keywordCase": "upper",
+  "dataTypeCase": "upper",
+  "functionCase": "upper",
+  "newlineBeforeSemicolon": true
 }
