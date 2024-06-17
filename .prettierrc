@@ -2,6 +2,7 @@
   "tabWidth": 2,
   "plugins": ["@prettier/plugin-php", "prettier-plugin-sql"],
   "phpVersion": "7.4",
+  "language": "mysql",
   "keywordCase": "upper",
   "dataTypeCase": "upper",
   "functionCase": "upper",
